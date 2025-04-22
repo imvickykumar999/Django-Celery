@@ -1,6 +1,7 @@
 # 🚀 Running the Project (Django + Celery + Redis)
 
 ![image](https://github.com/user-attachments/assets/9e95b35c-2507-4095-890e-020b1087b60d)
+![image](https://github.com/user-attachments/assets/a268d613-8fc2-4f88-9e76-fe05378eb781)
 
 This project uses **Celery** for background task processing and **django-celery-beat** for periodic task scheduling. Below are the steps and commands to get everything running for local development.
 
