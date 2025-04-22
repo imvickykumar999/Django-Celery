@@ -1,6 +1,37 @@
 # 🚀 Running the Project (Django + Celery + Redis)
 
-This project uses **Celery** for background task processing and **django-celery-beat** for periodic task scheduling. Below are the commands to run each service required for local development.
+This project uses **Celery** for background task processing and **django-celery-beat** for periodic task scheduling. Below are the steps and commands to get everything running for local development.
+
+---
+
+## 📦 Install Redis (Ubuntu / Codespaces / Dev Containers)
+
+If Redis is not already installed on your system:
+
+```bash
+sudo apt update
+sudo apt install redis-server -y
+```
+
+### ✅ Start Redis Manually
+
+Since `systemd` may not be available (e.g., in a Codespace), start Redis manually:
+
+```bash
+redis-server &
+```
+
+### 🔎 Test Redis is Working
+
+```bash
+redis-cli ping
+# Expected output: PONG
+```
+
+> If `redis-cli` is missing:
+```bash
+sudo apt install redis-tools
+```
 
 ---
 
@@ -28,7 +59,7 @@ celery -A myproject worker --loglevel=info
 - `-A myproject` refers to the project directory containing `celery.py`.
 - `--loglevel=info` shows task processing logs in the terminal.
 
-> ✅ Make sure Redis is running (`redis-server`) before starting the worker.
+> ✅ Make sure Redis is running before starting the worker.
 
 ---
 
@@ -51,6 +82,7 @@ celery -A myproject beat --loglevel=info
 
 | Service        | Command                                       | Description                              |
 |----------------|-----------------------------------------------|------------------------------------------|
+| Redis Server   | `redis-server &`                              | Starts Redis manually in foreground      |
 | Django Server  | `python3 manage.py runserver`                 | Web server and admin access              |
 | Celery Worker  | `celery -A myproject worker --loglevel=info` | Executes background tasks                |
 | Celery Beat    | `celery -A myproject beat --loglevel=info`   | Schedules and dispatches periodic tasks  |
