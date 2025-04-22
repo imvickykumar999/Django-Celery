@@ -1,0 +1,5 @@
+Django>=4.2,<5.0
+celery>=5.3
+redis>=4.5
+django-celery-beat>=2.5
+django-jazzmin>=2.6
