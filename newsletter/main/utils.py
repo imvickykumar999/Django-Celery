@@ -1,7 +1,7 @@
 import requests
 from .models import TelegramMessage
 
-BOT_TOKEN = '616xxx:xxxxxxxxxxxxxxxxxxxxxxxxjS60'
+BOT_TOKEN = '6165xxxxx:xxxxxxxxxxxxxxxxxxxxxxxxxxxxrTjS60'
 
 SEND_MESSAGE_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 EDIT_MESSAGE_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/editMessageText"
@@ -9,10 +9,14 @@ EDIT_MESSAGE_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/editMessageText"
 CHAT_IDS = ['5721393154']
 
 
-def send_telegram_message(message, update_message=False):
+def send_telegram_message(message, update_message=False, is_error=False):
+    """
+    Sends or updates a message based on the flag.
+    """
     for chat_id in CHAT_IDS:
         try:
             if update_message:
+                # Check if there's a previous message saved for this chat
                 existing = TelegramMessage.objects.filter(chat_id=chat_id).first()
                 if existing:
                     if existing.last_message == message:
@@ -39,15 +43,21 @@ def send_telegram_message(message, update_message=False):
                             print("⚠️ Could not parse error response.")
                 else:
                     print(f"ℹ️ No previous message, sending new to chat_id: {chat_id}")
-                    send_new_message(chat_id, message)
+                    send_new_message(chat_id, message, is_error)
             else:
-                send_new_message(chat_id, message)
+                send_new_message(chat_id, message, is_error)
 
         except Exception as e:
             print(f"🔥 Error sending/updating message for chat_id {chat_id}: {e}")
+            if not is_error:
+                # This is where you send an error message in case of unexpected errors
+                send_new_message(chat_id, f"⚠️ An unexpected error occurred: {str(e)}", is_error=True)
 
 
-def send_new_message(chat_id, message):
+def send_new_message(chat_id, message, is_error=False):
+    """
+    Sends a new Telegram message and saves its message_id for future updates.
+    """
     payload = {
         "chat_id": chat_id,
         "text": message,
