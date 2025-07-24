@@ -8,7 +8,6 @@
 #     print("Task completed")
 #     return "Done"
 
-  GNU nano 8.1                                                                                                                   tasks.py                                                                                                                             
 from celery import shared_task
 import time
 import requests
@@ -58,4 +57,3 @@ def test_celery_task():
         print(f"Error: {e}")
 
     return "Status check completed"
-
